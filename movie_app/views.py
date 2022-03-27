@@ -1,15 +1,19 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+"---------------------------------------------"
 from movie_app.serializers import DirectorSerializer, MoviesReviews, MovieValidateSerializer
 from movie_app.models import Director
+"---------------------------------------------"
 from movie_app.serializers import MovieSerializer, DirectorValidateSerializer
 from movie_app.models import Movie
+"---------------------------------------------"
 from movie_app.serializers import ReviewSerializer, ReviewValidateSerializer
 from movie_app.models import Review
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST'])  # 1
 def director_list_create_view(request):
     if request.method == 'GET':
         director = Director.objects.all()
@@ -25,8 +29,10 @@ def director_list_create_view(request):
         return Response(data=DirectorSerializer(director).data)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST'])  # 2
+@permission_classes([IsAuthenticated])
 def movie_list_create_view(request):
+    print(request.user)
     if request.method == 'GET':
         movie = Movie.objects.all()
         serializer = MovieSerializer(movie, many=True)
@@ -45,7 +51,7 @@ def movie_list_create_view(request):
         return Response(data=MovieSerializer(movie).data)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST'])  # 3
 def review_list_create_view(request):
     if request.method == 'GET':
         review = Review.objects.all()
@@ -63,7 +69,7 @@ def review_list_create_view(request):
         return Response(data=ReviewSerializer(review).data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])  # 1
 def director_item_view(request, id):
     try:
         director = Director.objects.get(id=id)
@@ -82,7 +88,7 @@ def director_item_view(request, id):
         return Response(data=DirectorSerializer(director).data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])  # 2
 def movie_item_view(request, id):
     try:
         movie = Movie.objects.get(id=id)
@@ -104,7 +110,7 @@ def movie_item_view(request, id):
         return Response(data=MovieSerializer(movie).data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])  # 4
 def review_item_view(request, id):
     try:
         review = Review.objects.get(id=id)
