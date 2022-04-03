@@ -68,3 +68,4 @@ class ReviewValidateSerializer(serializers.Serializer):
     text = serializers.CharField(min_length=2, max_length=300)
     movie_id = serializers.IntegerField()
     stars = serializers.IntegerField()
+
